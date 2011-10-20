@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
 
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
-  devise :database_authenticatable, :registerable, :confirmable,
+  devise :ldap_authenticatable, :registerable, :confirmable,
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
@@ -21,6 +21,7 @@ class User < ActiveRecord::Base
 
   validates :name, :presence => true
   validates :initials, :presence => true
+  #before_save :get_ldap_email
 
   def to_s
     "#{name} (#{initials}) <#{email}>"
@@ -37,6 +38,10 @@ class User < ActiveRecord::Base
       self.reset_password_token = Devise.friendly_token
     end
   end
+
+#  def get_ldap_email
+#    self.email = Devise::LdapAdapter.get_ldap_param(self.username,"mail")
+#  end
 
   def as_json(options = {})
     super(:only => JSON_ATTRIBUTES)
