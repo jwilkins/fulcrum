@@ -1,5 +1,7 @@
 Fulcrum::Application.routes.draw do
 
+  devise_for :users
+
   get "story/new"
 
   resources :projects do
